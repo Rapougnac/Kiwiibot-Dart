@@ -5,6 +5,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:kiwiibot_dart/src/utils/parse_doc.dart';
 import 'package:path/path.dart';
+// ignore: depend_on_referenced_packages
 import 'package:pub_semver/pub_semver.dart';
 
 Future<void> generate(String inPath, String outPath) async {
