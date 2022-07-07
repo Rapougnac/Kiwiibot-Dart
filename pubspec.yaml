@@ -11,6 +11,7 @@ dev_dependencies:
 
 dependencies: 
   analyzer: ^3.4.1
+  args: ^2.3.1
   nyxx: ^3.4.2
   nyxx_commands: ^4.2.0
   path: ^1.8.2

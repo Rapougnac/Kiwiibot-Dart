@@ -53,7 +53,7 @@ Future<void> generate(String inPath, String outPath) async {
               .split('=')
               [1]
               .trimLeft()
-              .split('(')
+              .split(RegExp(r'(\(|\.)'))
               .first;
           isOneOfGoodType = containsListTypes.contains(semanticType);
         }

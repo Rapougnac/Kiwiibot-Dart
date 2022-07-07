@@ -24,7 +24,7 @@ final helpCommand = ChatCommand(
       final commandParams = generatedArgs[commandName]?['args'] ?? '';
       final embed = EmbedBuilder()
         ..title =
-            '${gettedCommand.name} $commandParams'
+            '${ctx is InteractionChatContext ? '/' : (ctx as MessageChatContext).prefix}${gettedCommand.name} $commandParams'
         ..description = generatedArgs[commandName]?['description'];
       return ctx.respond(
         MessageBuilder.content('Yes, I will help you')..embeds = [embed],

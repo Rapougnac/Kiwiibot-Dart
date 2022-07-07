@@ -1,4 +1,11 @@
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 Converter<List<String>> listStringConverter = Converter<List<String>>(
-    (view, ctx) => view.buffer.split(' ').skip(1).toList());
+  (view, ctx) {
+    final args = <String>[];
+    while (!view.eof) {
+      args.add(view.getQuotedWord());
+    }
+    return args;
+  },
+);
