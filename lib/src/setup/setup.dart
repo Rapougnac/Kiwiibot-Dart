@@ -1,12 +1,13 @@
 import 'package:kiwiibot_dart/src/commands/both/help_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/ping_command.dart';
 import 'package:kiwiibot_dart/src/commands/legacy/massban_command.dart';
+import 'package:kiwiibot_dart/src/db/connection.dart';
 import 'package:kiwiibot_dart/src/utils/converters/list_converter.dart';
 import 'package:kiwiibot_dart/src/utils/converters/permissionsraw_to_human_readable.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
-void setup(String token) {
+void setup(String token) async {
   final client = NyxxFactory.createNyxxWebsocket(
     token,
     // All intents exept typings.
@@ -51,7 +52,8 @@ void setup(String token) {
       }
     } else if (c is BadInputException) {
       c.context.respond(
-        MessageBuilder.content('${c.runtimeType}: ${c.message.split(':').last.trimLeft()}'),
+        MessageBuilder.content(
+            '${c.runtimeType}: ${c.message.split(':').last.trimLeft()}'),
       );
       return;
     }
@@ -60,4 +62,6 @@ void setup(String token) {
   client.registerPlugin(commands);
 
   client.connect();
+
+  await setupConnection();
 }
