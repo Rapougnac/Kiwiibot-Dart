@@ -1,7 +1,7 @@
-import 'package:kiwiibot_dart/src/commands/both/help_command.dart';
-import 'package:kiwiibot_dart/src/commands/both/ping_command.dart';
-import 'package:kiwiibot_dart/src/commands/both/source_command.dart';
-import 'package:kiwiibot_dart/src/commands/legacy/massban_command.dart';
+import 'package:kiwiibot_dart/src/commands/both/core/help_command.dart';
+import 'package:kiwiibot_dart/src/commands/both/core/ping_command.dart';
+import 'package:kiwiibot_dart/src/commands/both/core/source_command.dart';
+import 'package:kiwiibot_dart/src/commands/legacy/core/massban_command.dart';
 import 'package:kiwiibot_dart/src/db/connection.dart';
 import 'package:kiwiibot_dart/src/utils/converters/list_converter.dart';
 import 'package:kiwiibot_dart/src/utils/converters/permissionsraw_to_human_readable.dart';
