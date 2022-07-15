@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "The file configuration for slang",
+  "description": "Allows you to customize the behaviour of slang.",
+  "type": "object",
+  "properties": {
+    "base_locale": {
+      "title": "The base locale",
+      "description": "Locale of default JSON.",
+      "type": "string",
+      "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$",
+      "default": "en"
+    },
+    "fallback_strategy": {
+      "title": "The fallback strategy",
+      "description": "Handle missing translations\nBy default, you must provide all translations for all locales. Otherwise, you cannot compile it.\n\nIn case of rapid development, you can turn off this feature. Missing translations will fallback to base locale.",
+      "type": "string",
+      "enum": ["none", "base_locale"],
+      "default": "none"
+    },
+    "input_directory": {
+      "title": "The input directory",
+      "description": "The path to the input directory.",
+      "default": null
+    },
+    "input_file_pattern": {
+      "title": "The input file pattern",
+      "description": "The pattern the input file must match.",
+      "type": "string",
+      "pattern": "^.+\\.(?:json|csv|yaml)$",
+      "default": ".i18n.json"
+    },
+    "output_directory": {
+      "title": "The output directory",
+      "description": "The path to the output directory.",
+      "type": "string",
+      "default": null
+    },
+    "output_file_name": {
+      "title": "The output file name",
+      "description": "The name the output file must have.",
+      "default": null
+    },
+    "output_format": {
+      "title": "Output format",
+      "description": "The format of output files.\nby default, a single \".g.dart\" file will be generated.\nYou can split this file into multiple ones to improve readability and IDE performance.\n\nAnd you only need to import the main file!",
+      "markdownDescription": "The format of output files.\nBy default, a single `.g.dart` file will be generated.\nYou can split this file into multiple ones to improve readability and IDE performance.\n\n```yaml\noutput_file_name: translations.g.dart\noutput_format: multiple_files # set this\n```\n\nThis will generate the following files:\n```text\nlib/\n └── i18n/\n\t  └── translations.g.dart <-- main file\n\t  └── translations_en.g.dart <-- translation classes\n\t  └── translations_de.g.dart <-- translation classes\n\t  └── ...\n\t  └── translations_map.g.dart <-- translations stored in flat maps\n```\n\nAnd you only need to import the main file!",
+      "enum": ["single_file", "multiple_files"],
+      "default": "single_file"
+    },
+    "locale_handling": {
+      "title": "Locale handling AKA Dependency Injection",
+      "description": "Generates locale handling logic.\nYou don't like the included LocaleSettings solution?\nThen you can use your own dependency injection solution!\nJust create custom translation instances that don't depend on LocaleSettings or any other side effects.",
+      "markdownDescription": "Generates locale handling logic.\nYou don't like the included LocaleSettings solution?\nThen you can use your own dependency injection solution!\nJust create custom translation instances that don't depend on LocaleSettings or any other side effects.\n\nFirst, set the following configuration:\n```yaml\n# Config\nlocale_handling: false # remove unused `t` variable, `LocaleSettings`, etc.\ntranslation_class_visibility: public\n```\nExample using the `riverpod` library:\n```dart\nfinal english = AppLocale.en.build(cardinalResolver: myEnResolver);\nfinal german = AppLocale.de.build(cardinalResolver: myDeResolver);\nfinal translationProvider = StateProvider<StringsEn>((ref) => german); // set it\n\n// access the current instance\nfinal t = ref.watch(translationProvider);\nString a = t.welcome.title;\n```\nCheckout the [full article](https://github.com/Tienisto/slang/blob/master/slang/documentation/dependency_injection.md)",
+      "type": "boolean",
+      "default": true
+    },
+    "flutter_integration": {
+      "title": "Flutter integration",
+      "description": "Generates flutter features.",
+      "markdownDescription": "Generates flutter features.\nYou can use this library without flutter.\n```yaml\nflutter_integration: false # set this\n```",
+      "default": true
+    },
+    "namespaces": {
+      "title": "Namespaces",
+      "description": "Split input files.",
+      "markdownDescription": "Split input files.\n\nYou can split the translations into multiple files. Each file represents a namespace.\nThis feature is disabled by default for single-file usage. You must enable it.\n```yaml\n# Config\nnamespaces: true # enable this feature\noutput_directory: lib/i18n # optional\noutput_file_name: translations.g.dart # set file name (mandatory)\n```\nLet's create two namespaces called `widgets` and `dialogs`.\n```text\n<namespace>_<locale?>.<extension>\n```\n```text\ni18n/\n └── widgets.i18n.json\n └── widgets_fr.i18n.json\n └── dialogs.i18n.json\n └── dialogs_fr.i18n.json\n```\nYou can also use different folders. Only file name matters!\n```text\ni18n/\n └── widgets/\n\t  └── widgets.i18n.json\n\t  └── widgets_fr.i18n.json\n └── dialogs/\n\t  └── dialogs.i18n.json\n\t  └── dialogs_fr.i18n.json\n```\n\n```text\ni18n/\n └── en/\n\t  └── widgets.i18n.json\n\t  └── dialogs.i18n.json\n └── fr/\n\t  └── widgets_fr.i18n.json\n\t  └── dialogs.i18n.json <-- directory locale will be used\n```\nNow access the translations:\n```dart\n// t.<namespace>.<path>\nString a = t.widgets.welcomeCard.title;\nString b = t.dialogs.logout.title;\n```",
+      "type": "boolean",
+      "default": false
+    },
+    "translate_var": {
+      "title": "Translate variable",
+      "description": "The translate variable name",
+      "type": "string",
+      "default": "t"
+    },
+    "enum_name": {
+      "title": "Enum name",
+      "description": "The enum name",
+      "type": "string",
+      "default": "AppLocale"
+    },
+    "translation_class_visibility": {
+      "title": "Translation class visibility",
+      "description": "The translation class visibility.",
+      "type": "string",
+      "enum": ["private", "public"],
+      "default": "private"
+    },
+    "key_case": {
+      "title": "Key case",
+      "description": "Transform the key case of the properties.",
+      "markdownDescription": "Transform the key case of the properties.\nBy default, no transformations will be applied.\nYou can change that by specifying `key_case`, `key_map_case` or `param_case`.\nPossible cases are: `camel`, `snake` and `pascal`.\n```json\n{\n  \"must_be_camel_case\": \"The parameter is in {snakeCase}\",\n  \"my_map\": {\n\t\"this_should_be_in_pascal\": \"hi\"\n  }\n}\n```\n---\n```yaml\n# Config\nkey_case: camel\nkey_map_case: pascal\nparam_case: snake\nmaps:\n  - myMap # all paths must be cased accordingly\n```\n---\n```dart\nString a = t.mustBeCamelCase(snake_case: 'nice');\nString b = t.myMap['ThisShouldBeInPascal'];\n```",
+      "type": "string",
+      "enum": ["null", "camel", "pascal", "snake"],
+      "default": null
+    },
+    "key_map_case": {
+      "title": "Key Map case",
+      "description": "Transform the key case of the maps.",
+      "markdownDescription": "Transform the key case of the maps.\nBy default, no transformations will be applied.\nYou can change that by specifying `key_case`, `key_map_case` or `param_case`.\nPossible cases are: `camel`, `snake` and `pascal`.\n```json\n{\n  \"must_be_camel_case\": \"The parameter is in {snakeCase}\",\n  \"my_map\": {\n\t\"this_should_be_in_pascal\": \"hi\"\n  }\n}\n```\n---\n```yaml\n# Config\nkey_case: camel\nkey_map_case: pascal\nparam_case: snake\nmaps:\n  - myMap # all paths must be cased accordingly\n```\n---\n```dart\nString a = t.mustBeCamelCase(snake_case: 'nice');\nString b = t.myMap['ThisShouldBeInPascal'];\n```",
+      "type": "string",
+      "enum": ["null", "camel", "pascal", "snake"],
+      "default": null
+    },
+    "param_case": {
+      "title": "Key Params case",
+      "description": "Transform the key case of the params.",
+      "markdownDescription": "Transform the key case of the params.\nBy default, no transformations will be applied.\nYou can change that by specifying `key_case`, `key_map_case` or `param_case`.\nPossible cases are: `camel`, `snake` and `pascal`.\n```json\n{\n  \"must_be_camel_case\": \"The parameter is in {snakeCase}\",\n  \"my_map\": {\n\t\"this_should_be_in_pascal\": \"hi\"\n  }\n}\n```\n---\n```yaml\n# Config\nkey_case: camel\nkey_map_case: pascal\nparam_case: snake\nmaps:\n  - myMap # all paths must be cased accordingly\n```\n---\n```dart\nString a = t.mustBeCamelCase(snake_case: 'nice');\nString b = t.myMap['ThisShouldBeInPascal'];\n```",
+      "type": "string",
+      "enum": ["null", "camel", "pascal", "snake"],
+      "default": null
+    },
+    "string_interpolation": {
+      "title": "String Interpolation",
+      "description": "String interpolation mode.\nTranslations often have a dynamic parameter. There are multiple ways to define them. You can always escape them by adding a backslash, e.g. \"\\{notAnArgument}\".",
+      "markdownDescription": "String interpolation mode.\nTranslations often have a dynamic parameter. There are multiple ways to define them.\n```yaml\n# Configstring_interpolation: dart # change to braces or double_braces\n```\nYou can always escape them by adding a backslash, e.g. `\\{notAnArgument}`.\n### dart (default)\n```text\n Hello $name. I am ${height}m.\n```\n### braces\n```text\n Hello {name}\n```\n### double_braces\n```text\n Hello {{name}}\n```",
+      "type": "string",
+      "enum": ["dart", "braces", "double_braces"],
+      "default": "dart"
+    },
+    "flat_map": {
+      "title": "Flat Map",
+      "description": "Generates flat map.",
+      "markdownDescription": "Generates flat map.\nA more general solution to [Maps](https://pub.dev/packages/slang#-maps). **ALL** translations are accessible via an one-dimensional map.\n\nIt is supported out of the box. No configuration needed.\n\nThis can be disabled globally by setting `flat_map: false`.",
+      "type": "boolean",
+      "default": true
+    },
+    "timestamp": {
+      "title": "Timestamp",
+      "description": "Write \"Built on\" timestamp.",
+      "type": "boolean",
+      "default": true
+    },
+    "maps": {
+      "title": "Maps",
+      "description": "Entries which should be accessed via keys.",
+      "markdownDescription": "Entries which should be accessed via keys.\nYou can access each translation via string keys by defining maps.\n\nDefine maps in your `slang.yaml` or `build.yaml`.\n\nKeep in mind that all nice features like autocompletion are gone.\n```json\n// File: strings.i18n.json\n{\n  \"a\": {\n    \"hello world\": \"hello\"\n  },\n  \"b\": {\n    \"b0\": \"hey\",\n    \"b1\": {\n\t  \"hi there\": \"hi\"\n    }\n  }\n}\n```\n---\n```yaml\n# Config\nmaps:\n  - a\n  - b.b1\n```\n---\n```dart\nString a = t.a['hello world']; // \"hello\"\nString b = t.b.b0; // \"hey\"\nString c = t.b.b1['hi there']; // \"hi\"\n```",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "pluralization": {
+      "title": "Pluralization",
+      "type": "object",
+      "properties": {
+        "auto": {
+          "type": "string",
+          "enum": ["off", "cardinal", "ordinal"],
+          "default": "cardinal",
+          "description": "https://pub.dev/packages/slang#-pluralization",
+          "markdownDescription": "[See description here](https://pub.dev/packages/slang#-pluralization)"
+        },
+        "cardinal": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ordinal": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contexts": {
+      "type": "object",
+      "additionalProperties": {
+        "properties": {
+          "enum": {
+            "markdownDescription": "Context forms \\([I](https://pub.dev/packages/slang#-custom-contexts--enums)\\)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paths": {
+            "markdownDescription": "Entries using this context",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "default_parameter": {
+            "type": "string",
+            "default": "context"
+          },
+          "generate_enum": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "default": null
+      }
+    },
+    "imports": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
