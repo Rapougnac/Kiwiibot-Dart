@@ -1,5 +1,6 @@
 import 'package:kiwiibot_dart/src/commands/both/help_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/ping_command.dart';
+import 'package:kiwiibot_dart/src/commands/both/source_command.dart';
 import 'package:kiwiibot_dart/src/commands/legacy/massban_command.dart';
 import 'package:kiwiibot_dart/src/db/connection.dart';
 import 'package:kiwiibot_dart/src/utils/converters/list_converter.dart';
@@ -30,7 +31,8 @@ void setup(String token) async {
   commands
     ..addCommand(pingCommand)
     ..addCommand(helpCommand)
-    ..addCommand(massbanCommand);
+    ..addCommand(massbanCommand)
+    ..addCommand(sourceCommand);
 
   commands.addConverter(listStringConverter);
 

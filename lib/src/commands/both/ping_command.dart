@@ -9,7 +9,6 @@ final pingCommand = ChatCommand(
   id<Function(IChatContext)>(
     'ping',
     (ctx, [List<String> rest = const []]) {
-      // ctx.commands
       return ctx.respond(
         MessageBuilder.content('Pong! You said ${rest.join(' ')}'),
       );
