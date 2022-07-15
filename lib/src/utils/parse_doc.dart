@@ -1,13 +1,6 @@
 import 'dart:convert' show HtmlEscape;
 
-// TODO: Remove this.
-@Deprecated('Not useful anymore')
-String parseDoc(String src) {
-  return stripComments(stripDartdocCommentsFromSource(src));
-}
-
-/// {@ndd}
-/// Strpis dart doc comments from the given [source].
+/// Strips dart doc comments from the given [source].
 String stripDartdocCommentsFromSource(String source) {
   var skipNext = false;
   return source.split('\n').where((String line) {
