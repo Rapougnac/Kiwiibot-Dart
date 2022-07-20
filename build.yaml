@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://json.schemastore.org/dart-build.json
+
+targets:
+  kiwiibot_dart:kiwiibot_dart:
+    builders:
+      kiwiibot_dart|gen_docs:
+        enabled: True
+        generate_for:
+          - lib/src/commands/**
+      kiwiibot_dart|gen_sources:
+        enabled: True
+        generate_for:
+          - lib/src/commands/**
+
+builders:
+  gen_docs:
+    import: "package:kiwiibot_dart/src/utils/generator/generate_descriptions.dart"
+    builder_factories: ["generateDocs"]
+    auto_apply: dependents
+    build_to: source
+    build_extensions: { 'lib/\$lib\$': ["descriptions.g.dart"] }
+  gen_sources:
+    import: "package:kiwiibot_dart/src/utils/generator/generate_source.dart"
+    builder_factories: ["generateSources"]
+    auto_apply: dependents
+    build_to: source
+    build_extensions: { 'lib/\$lib\$': ["sources.g.dart"] }

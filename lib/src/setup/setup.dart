@@ -1,6 +1,7 @@
 import 'package:kiwiibot_dart/src/commands/both/core/help_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/ping_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/source_command.dart';
+// import 'package:kiwiibot_dart/src/commands/both/edit-images/images/rip.dart';
 import 'package:kiwiibot_dart/src/commands/legacy/core/massban_command.dart';
 import 'package:kiwiibot_dart/src/db/connection.dart';
 import 'package:kiwiibot_dart/src/utils/converters/list_converter.dart';
@@ -18,7 +19,8 @@ void setup(String token) async {
     cacheOptions: CacheOptions()
       // I really like overcaching, yes
       ..memberCachePolicyLocation = CachePolicyLocation.all()
-      ..memberCachePolicy = MemberCachePolicy.all,
+      ..memberCachePolicy = MemberCachePolicy.all
+      ..userCachePolicyLocation = CachePolicyLocation.all()
   )
     ..registerPlugin(Logging())
     ..registerPlugin(CliIntegration())
@@ -33,6 +35,7 @@ void setup(String token) async {
     ..addCommand(helpCommand)
     ..addCommand(massbanCommand)
     ..addCommand(sourceCommand);
+    // ..addCommand(ripCommand);
 
   commands.addConverter(listStringConverter);
 
