@@ -1,0 +1,5 @@
+perms:
+  one: permission
+  other: permissions
+
+missingPermissions: "Hey, on dirait qu'il vous manque les $perms suivantes: $permissions"

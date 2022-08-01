@@ -1,0 +1,5 @@
+setLangCommand:
+  localeNotFound: "Cette langue n'est pas supportée ! Essayez d'utiliser l'une des suivantes ; $locales"
+  done: Excellent ! Je parle français maintenant ! :3
+  
+ping: "🏓 P${o}ng ! Le ping est de: `${ping}ms`\nHeartbeat: `${hb}ms`"

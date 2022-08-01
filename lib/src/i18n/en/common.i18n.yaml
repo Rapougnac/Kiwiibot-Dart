@@ -1,0 +1,5 @@
+perms:
+  one: permission
+  other: permissions
+
+missingPermissions: Hey, it looks like you're missing the $permissions $perms

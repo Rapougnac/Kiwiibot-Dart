@@ -59,7 +59,7 @@ class SourceGenerator extends Generator {
       final beginLine = unit.lineInfo.getLocation(node.beginToken.charOffset - command.variable.documentationComment!.length);
       final endLine = unit.lineInfo.getLocation(node.endToken.charOffset);
       final source =
-          command.declaration.source.fullName.split('/kiwiibot_dart').last;
+          command.declaration.source.fullName.split('/kiwiibot_dart').last.substring(1);
       final name =
           command.declaration.source.shortName.split('_command.dart').first;
       sb.write('''

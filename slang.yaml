@@ -1,1 +1,10 @@
 # yaml-language-server: $schema=./slang.schema.json
+base_locale: en
+fallback_strategy: base_locale
+flutter_integration: false
+input_directory: lib/src/i18n
+input_file_pattern: .i18n.yaml
+locale_handling: false
+translation_class_visibility: public
+namespaces: true
+output_directory: lib/

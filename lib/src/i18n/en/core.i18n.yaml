@@ -1,0 +1,5 @@
+setLangCommand:
+  localeNotFound: "This locale is not reconized, try using one of the following: $locales"
+  done: Neat! So I talk english now! :3
+
+ping: "🏓 P${o}ng! The ping is: `${ping}ms`\nHeartbeat: `${hb}ms`"

@@ -27,7 +27,9 @@ final sourceCommand = ChatCommand(
       final url =
           '<$sourceUrl/blob/$branch/$location#L${lines.first}-L${lines.last}>';
 
-      return ctx.respond(MessageBuilder.content(url));
+      return ctx is MessageChatContext
+          ? ctx.respond(MessageBuilder.content(url), mention: false)
+          : ctx.respond(MessageBuilder.content(url));
     },
   ),
 );
