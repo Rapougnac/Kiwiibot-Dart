@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:kiwiibot_dart/descriptions.g.dart';
 import 'package:kiwiibot_dart/sources.g.dart';
+import 'package:nyxx_interactions/nyxx_interactions.dart';
 
 /// Shows the source of the command.
 final sourceCommand = ChatCommand(
@@ -9,7 +12,7 @@ final sourceCommand = ChatCommand(
   sourceCommandDescription,
   id(
     'source',
-    (IContext ctx, [String? command]) {
+    (IContext ctx, [@Autocomplete(cb) String? command]) {
       final sourceUrl = 'https://github.com/Rapougnac/Kiwiibot-Dart';
       final branch = 'mistress';
       if (command == null) {
@@ -33,3 +36,10 @@ final sourceCommand = ChatCommand(
     },
   ),
 );
+
+FutureOr<Iterable<ArgChoiceBuilder>?> cb(AutocompleteContext ctx) {
+  final current = ctx.currentValue;
+  final filtered =
+      ctx.commands.walkCommands().where((e) => e.name.startsWith(current));
+  return filtered.map((e) => ArgChoiceBuilder(e.name, e.name));
+}
