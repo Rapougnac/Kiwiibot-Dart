@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:kiwiibot_dart/src/utils/checks/guild_check.dart';
+import 'package:kiwiibot_dart/src/utils/checks/checks.dart';
 import 'package:kiwiibot_dart/descriptions.g.dart';
 import 'package:args/args.dart';
 import 'package:nyxx/nyxx.dart';

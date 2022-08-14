@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:kiwiibot_dart/src/utils/checks/guild_check.dart';
+import 'package:kiwiibot_dart/src/utils/checks/checks.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:nyxx_interactions/nyxx_interactions.dart';

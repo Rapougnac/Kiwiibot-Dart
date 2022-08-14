@@ -4,7 +4,7 @@ targets:
   kiwiibot_dart:kiwiibot_dart:
     builders:
       kiwiibot_dart|gen_docs:
-        enabled: True
+        enabled: False
         generate_for:
           - lib/src/commands/**
       kiwiibot_dart|gen_sources:

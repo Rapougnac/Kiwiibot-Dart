@@ -5,18 +5,22 @@ import 'package:kiwiibot_dart/src/commands/both/core/help_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/ping_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/setlanguage_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/source_command.dart';
+import 'package:kiwiibot_dart/src/commands/legacy/core/tag_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/infos/user_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/music/play_command.dart';
 // import 'package:kiwiibot_dart/src/commands/both/edit-images/images/rip.dart';
 import 'package:kiwiibot_dart/src/commands/legacy/core/massban_command.dart';
 import 'package:kiwiibot_dart/src/db/connection.dart';
+import 'package:kiwiibot_dart/src/services/tag.dart';
 import 'package:kiwiibot_dart/src/utils/converters/list_converter.dart';
 import 'package:kiwiibot_dart/src/utils/converters/permissionsraw_to_human_readable.dart';
+import 'package:kiwiibot_dart/src/utils/converters/tag_converter.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:nyxx_lavalink/nyxx_lavalink.dart';
 import 'package:supabase/supabase.dart';
 import 'package:kiwiibot_dart/strings.g.dart';
+import 'package:logging/logging.dart';
 
 late final ICluster cluster;
 late final SupabaseClient supabase;
@@ -24,6 +28,7 @@ final cached = {};
 final fb = AppLocale.en.build();
 
 void setup(String token) async {
+  // Logger.root.level = Level.FINE;
   final client = NyxxFactory.createNyxxWebsocket(
       token,
       // All intents exept typings.
@@ -43,22 +48,26 @@ void setup(String token) async {
 
   final res = await supabase.from('guild').select().execute();
 
-  for (var element in (res.data as List)) {
+  for (Map element in (res.data as List)) {
     final gid = element.remove('guild_id');
-    cached[gid] = {...element as Map};
+    cached[gid] = {...element};
   }
 
   final commands = CommandsPlugin(
       prefix: (m) {
         if (m.guild == null) {
-          return mentionOr((msg) => (dmOr((_) => 'm?'))(msg))(m);
+          return dmOr((_) => 'm?')(m);
         }
         final map = cached[m.guild!.id.toString()];
         if (map == null) {
-          return mentionOr((msg) => (dmOr((_) => 'm?'))(msg))(m);
+          return mentionOr((msg) => 'm?')(m);
         }
 
-        return map['prefix'];
+        if (StringView(m.content).skipString(map['prefix'])) {
+          return mentionOr((_) => map['prefix'])(m);
+        }
+
+        return mentionOr((_) => 'm?')(m);
       },
       guild: 911736666551640075.toSnowflake(),
       options: CommandsOptions(acceptSelfCommands: false));
@@ -69,10 +78,15 @@ void setup(String token) async {
     ..addCommand(sourceCommand)
     ..addCommand(setLanguageCommand)
     // ..addCommand(userCommand)
-    ..addCommand(playCommand);
+    ..addCommand(playCommand)
+    ..addCommand(tagCommand);
   // ..addCommand(ripCommand);
 
-  commands.addConverter(listStringConverter);
+  commands
+    ..addConverter(listStringConverter)
+    ..addConverter(tagConverter);
+
+  TagService();
 
   commands.onCommandError.listen((c) {
     if (c is CheckFailedException) {
@@ -90,6 +104,8 @@ void setup(String token) async {
         ));
         return;
       }
+
+      if (c.failed.name == 'voiceCheck') {}
     } else if (c is BadInputException) {
       c.context.respond(
         MessageBuilder.content(
@@ -106,6 +122,10 @@ void setup(String token) async {
   // await setupConnection();
 
   client.eventsWs.onReady.listen((_) async {
+    client.shardManager.shards
+        .elementAt(0)
+        .onDisconnect
+        .listen((event) => print('Oh no!'));
     cluster = ICluster.createCluster(client, client.self.id);
     await cluster.addNode(NodeOptions());
   });

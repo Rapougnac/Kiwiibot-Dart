@@ -25,6 +25,7 @@ dependencies:
   nyxx_lavalink: ^3.0.1
   supabase: ^0.3.6
   nyxx_interactions: ^4.3.0
+  fuzzy: 0.4.0-nullsafety.0
 
 dependency_overrides:
   nyxx: ^4.0.0

@@ -24,7 +24,7 @@ import 'package:source_gen/source_gen.dart';
 //         path: absolute(normalize(file.path)),
 //         featureSet: FeatureSet.latestLanguageVersion());
 //     final decl = ast.unit.declarations.first;
-//     // final 
+//     // final
 //     sb.write('''
 //   '${decl.firstTokenAfterCommentAndMetadata.next.toString().split('Command').first}': {
 //     'lines': '$linesFrom-$linesTo',
@@ -38,7 +38,9 @@ import 'package:source_gen/source_gen.dart';
 //   await File(outPath).writeAsString(sb.toString());
 // }
 
-Builder generateSources(BuilderOptions options) => LibraryBuilder(SourceGenerator(), generatedExtension: '.sources.part.g.dart');
+Builder generateSources(BuilderOptions options) =>
+    LibraryBuilder(SourceGenerator(),
+        generatedExtension: '.sources.part.g.dart');
 
 class SourceGenerator extends Generator {
   @override
@@ -47,19 +49,25 @@ class SourceGenerator extends Generator {
         StringBuffer('const sourceFilesInfos = <String, Map<String, String>>{');
     final commands = getCommands(library);
     for (final command in commands) {
+      if (command.variable.documentationComment == null) {
+        continue;
+      }
       final unit =
           ((command as dynamic).enclosingUnit as CompilationUnitElement);
       final session = command.session;
       final parsed = session?.getParsedLibraryByElement(command.library);
-      final el =
-          (parsed as ParsedLibraryResult?)?.getElementDeclaration(command.variable);
+      final el = (parsed as ParsedLibraryResult?)
+          ?.getElementDeclaration(command.variable);
       final node = el?.node;
       if (node == null) continue;
       // Include comments too, as it is part of the command.
-      final beginLine = unit.lineInfo.getLocation(node.beginToken.charOffset - command.variable.documentationComment!.length);
+      final beginLine = unit.lineInfo.getLocation(node.beginToken.charOffset -
+          command.variable.documentationComment!.length);
       final endLine = unit.lineInfo.getLocation(node.endToken.charOffset);
-      final source =
-          command.declaration.source.fullName.split('/kiwiibot_dart').last.substring(1);
+      final source = command.declaration.source.fullName
+          .split('/kiwiibot_dart')
+          .last
+          .substring(1);
       final name =
           command.declaration.source.shortName.split('_command.dart').first;
       sb.write('''

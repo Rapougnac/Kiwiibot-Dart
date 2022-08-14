@@ -8,3 +8,7 @@ build/
 # Generated files
 *.exe
 *.g.dart
+
+# Lavalink
+application.yml
+Lavalink.jar

@@ -38,6 +38,8 @@ const generatedArgs = <String, Map<String, String>>{
     final parameterList =
         (id.argumentList.arguments[1] as FunctionExpression).parameters!;
 
+    final List<String> stringParams = [];
+
     for (final param in parameterList.parameters.skip(1)) {
       if (param.childEntities.first is SimpleFormalParameter ||
           param is SimpleFormalParameter) {
@@ -57,14 +59,15 @@ const generatedArgs = <String, Map<String, String>>{
         }
 
         final str = param.isOptional ? '<$identifier>' : '[$identifier]';
-        sb.write('''
-  ${id.argumentList.arguments.first.toString()}: {
-    'args': '$str',
-    'description': ${id.argumentList.arguments.first.toString().split('\'').join()}CommandDescription,
-  },
-''');
+        stringParams.add(str);
       }
     }
+    sb.write('''
+  ${id.argumentList.arguments.first.toString()}: {
+    'args': '${stringParams.join(' ')}',
+    'description': ${id.argumentList.arguments.first.toString().split('\'').join().replaceAll('-', '')}CommandDescription,
+  },
+''');
   }
 
   sb.write('};');
