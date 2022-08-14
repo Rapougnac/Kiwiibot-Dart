@@ -5,7 +5,7 @@ import 'package:kiwiibot_dart/src/commands/both/core/help_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/ping_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/setlanguage_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/core/source_command.dart';
-import 'package:kiwiibot_dart/src/commands/legacy/core/tag_command.dart';
+import 'package:kiwiibot_dart/src/commands/both/core/tag_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/infos/user_command.dart';
 import 'package:kiwiibot_dart/src/commands/both/music/play_command.dart';
 // import 'package:kiwiibot_dart/src/commands/both/edit-images/images/rip.dart';
