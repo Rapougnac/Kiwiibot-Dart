@@ -29,5 +29,5 @@ dependencies:
   ffi: ^2.0.1
 
 dependency_overrides:
-  nyxx: ^4.0.0
+  nyxx: ^4.3.0
   # nyxx_commands: https://github.com/nyxx-discord/nyxx_commands.git
